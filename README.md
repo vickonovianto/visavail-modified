@@ -1,5 +1,6 @@
-# Visavail.js - A Time Data Availability Chart <!-- omit in toc -->
-This library visualizes the availability of time-dependent data with a chart on a website.
+# Modified Visavail.js - A Time Data Availability Chart <!-- omit in toc -->
+This uses and modify [visavail.js](https://github.com/flrs/visavail) library which visualizes the availability of time-dependent data with a chart on a website.
+This is the original docs of visavail.js:
 
 <br>
 
