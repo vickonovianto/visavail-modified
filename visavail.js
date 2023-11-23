@@ -978,6 +978,8 @@
 					})
 					.attr('cursor', 'pointer')
 					.attr('class', 'dataset');
+
+				
 				
 				
 				// g.selectAll('rect')
@@ -1042,6 +1044,53 @@
 					.on("mousemove", function(){
 						redrawTooltipWhenMoved(d3.event.layerX, d3.event.layerY, this)
 					})
+
+					const rects = svg.select('#g_data').selectAll('g').selectAll('rect');
+					rects.each(function (d, i) {
+						var currentRect = d3.select(this);
+
+						const width = +currentRect.attr('width');
+						const rectClass = currentRect.attr("class");
+						let color = "white";
+						let fullName = "";
+						const series = dataset.filter(
+                            function (series) {
+                                return series.disp_data.indexOf(d) >= 0;
+                            }
+                        )[0];
+                        if (series && series.fullNameArray && series.fullNameArray[i]) {
+                            fullName = series.fullNameArray[i];
+                        }
+						if (fullName.length > 15) {
+							fullName = fullName.substring(0, 15) + "...";
+						}
+
+						if (width > 0)
+						{
+                            if (rectClass === "rect_schedule_status_planned" || rectClass === "rect_schedule_status_planned_accepted") {
+                                color = "black";
+                            }
+							d3.select(this.parentNode)
+								.append('text')
+								.attr('x', +currentRect.attr('x') + +currentRect.attr('width') / 2)
+								.attr('y', +currentRect.attr('y') + +currentRect.attr('height') / 2 + 5)
+								.style('fill', color)
+								.attr("text-anchor", "middle")
+								.text(fullName)
+								.on('mouseover', function() {
+									redrawTooltipWhenOver(currentRect.node(), dataset, d3.event.layerX, d3.event.layerY, d, i);
+								})
+								.on('mouseout', function () {
+									redrawTooltipWhenOut(currentRect.node());
+								})
+								.on('click', function () {
+									options.onClickBlock.call(currentRect.node(), d, i);
+								})
+								.on("mousemove", function () {
+									redrawTooltipWhenMoved(d3.event.layerX, d3.event.layerY, currentRect.node());
+								});
+						}
+					  });
 	
 					// .on("touchstart", function (d, i) {
 					// 	console.log("entrato",  d3.touches)
